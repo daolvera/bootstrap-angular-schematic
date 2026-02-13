@@ -6,7 +6,6 @@ import {
   Tree,
   apply,
   chain,
-  filter,
   mergeWith,
   move,
   template,
@@ -172,6 +171,19 @@ function updateAngularJson(options: Schema): Rule {
       context.logger.info("✅ Added Bootstrap Icons to angular.json");
     }
 
+    // Add custom styles folder reference
+    const sourceRoot = project.sourceRoot || "src";
+    const customStylesPath = `${sourceRoot}/styles/styles.scss`;
+    if (
+      !styles.some(
+        (s: string) =>
+          typeof s === "string" && s.includes("styles/styles.scss"),
+      )
+    ) {
+      styles.push(customStylesPath);
+      context.logger.info("✅ Added custom styles to angular.json");
+    }
+
     project.architect.build.options.styles = styles;
 
     tree.overwrite("/angular.json", JSON.stringify(workspaceConfig, null, 2));
@@ -331,11 +343,8 @@ function addTemplateFiles(options: Schema): Rule {
 
     const sourceRoot = project.sourceRoot || "src";
 
-    // Apply template files, but exclude the main styles.scss file
-    // We only want to copy the partial files (_variables.scss, _global.scss)
-    // The main styles file is handled by updateMainStylesheet()
+    // Apply template files
     const templateSource = apply(url("./files"), [
-      filter((path) => !path.endsWith("/styles/styles.scss")),
       template({
         ...strings,
         ...options,

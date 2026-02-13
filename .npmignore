@@ -1,0 +1,47 @@
+# NPM ignore file - exclude files from npm package
+# The dist/ folder contains the compiled schematic and WILL be published
+
+# Source TypeScript files (except type definitions)
+src/
+tsconfig.json
+tsconfig.*.json
+
+# Tests
+*.spec.ts
+*.spec.js
+jasmine.json
+
+# Development documentation
+DEVELOPMENT.md
+PLAN.md
+PROJECT-SUMMARY.md
+PUBLISHING.md
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build scripts and tools
+scripts/
+node_modules/
+
+# Git
+.git/
+.gitignore
+.github/
+
+# Misc
+npm-debug.log
+yarn-error.log
+.angular/
+coverage/
+tmp/
+out-tsc/
+

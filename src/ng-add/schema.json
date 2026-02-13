@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "NgAddBootstrapSchematic",
+  "title": "Bootstrap Angular Schematic Options",
+  "type": "object",
+  "properties": {
+    "project": {
+      "type": "string",
+      "description": "The name of the project to add Bootstrap schematic to.",
+      "$default": {
+        "$source": "projectName"
+      }
+    },
+    "skipInstall": {
+      "type": "boolean",
+      "default": false,
+      "description": "Skip installing dependency packages."
+    },
+    "routing": {
+      "type": "boolean",
+      "default": true,
+      "description": "Generate routing module with sample pages."
+    },
+    "style": {
+      "type": "string",
+      "default": "scss",
+      "enum": ["css", "scss"],
+      "description": "The file extension to use for style files."
+    }
+  },
+  "required": []
+}

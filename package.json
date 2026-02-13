@@ -1,0 +1,48 @@
+{
+  "name": "@dao/bootstrap-angular-schematic",
+  "version": "1.0.0",
+  "description": "Angular schematic that generates a fully-configured Angular application with Bootstrap, pre-built services, and common UI components",
+  "keywords": [
+    "angular",
+    "schematic",
+    "bootstrap",
+    "ng-bootstrap",
+    "angular-cli",
+    "code-generation"
+  ],
+  "author": "Daniel Olvera",
+  "license": "MIT",
+  "schematics": "./collection.json",
+  "ng-add": {
+    "save": "devDependencies"
+  },
+  "scripts": {
+    "build": "node scripts/build.js",
+    "build:watch": "tsc -p tsconfig.json --watch",
+    "test": "npm run build && jasmine src/**/*_spec.js",
+    "clean": "node scripts/clean.js",
+    "prepublishOnly": "npm run clean && npm run build && npm test",
+    "link:local": "npm run build && cd dist && npm link",
+    "version": "npm run build && git add -A dist",
+    "postversion": "git push && git push --tags"
+  },
+  "dependencies": {
+    "@angular-devkit/core": "^19.0.0",
+    "@angular-devkit/schematics": "^19.0.0",
+    "@schematics/angular": "^19.0.0",
+    "typescript": "~5.6.0"
+  },
+  "devDependencies": {
+    "@types/jasmine": "~5.1.0",
+    "@types/node": "^22.0.0",
+    "jasmine": "^5.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dao/bootstrap-angular-schematic.git"
+  },
+  "engines": {
+    "node": ">=18.19.0",
+    "npm": ">=10.0.0"
+  }
+}

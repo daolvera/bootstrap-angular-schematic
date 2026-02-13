@@ -1,0 +1,436 @@
+<div class="utils-demo">
+  <div class="row">
+    <div class="col-12">
+      <h1 class="mb-4">Utilities Showcase</h1>
+      <p class="lead">
+        Explore the powerful form utilities and custom validators included in
+        this template.
+      </p>
+    </div>
+  </div>
+
+  <!-- Documentation Section -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="alert alert-info">
+        <h5 class="alert-heading">
+          <i class="bi bi-info-circle me-2"></i>Available Utilities
+        </h5>
+        <hr />
+        <div class="row">
+          <div class="col-md-6">
+            <h6>FormUtils</h6>
+            <ul>
+              <li>
+                <code>markAllAsTouched(form)</code> - Mark all controls as
+                touched
+              </li>
+              <li>
+                <code>getAllErrors(form)</code> - Get all validation errors
+              </li>
+              <li>
+                <code>getErrorMessage()</code> - Get user-friendly error
+                messages
+              </li>
+              <li>
+                <code>formatFieldName()</code> - Format field names nicely
+              </li>
+              <li>
+                <code>validateForm()</code> - Validate and get error messages
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-6">
+            <h6>CustomValidators</h6>
+            <ul>
+              <li>
+                <code>matchesField()</code> - Match another field (e.g.,
+                password confirmation)
+              </li>
+              <li><code>phoneNumber()</code> - Validate phone numbers</li>
+              <li>
+                <code>strongPassword()</code> - Enforce strong password rules
+              </li>
+              <li><code>url()</code> - Validate URLs</li>
+              <li><code>creditCard()</code> - Validate credit card numbers</li>
+              <li>
+                <code>minAge()</code>, <code>maxAge()</code> - Age validation
+              </li>
+              <li><code>dateRange()</code> - Date range validation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Registration Form Demo -->
+  <div class="row mt-4">
+    <div class="col-lg-6 mb-4">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Registration Form Demo</h5>
+          <small>Showcasing CustomValidators in action</small>
+        </div>
+        <div class="card-body">
+          <form
+            [formGroup]="registrationForm"
+            (ngSubmit)="onRegistrationSubmit()"
+          >
+            <!-- Username -->
+            <div class="mb-3">
+              <label for="username" class="form-label">
+                Username <span class="text-danger">*</span>
+              </label>
+              <input
+                type="text"
+                id="username"
+                class="form-control"
+                formControlName="username"
+                [class.is-invalid]="
+                  hasError(registrationForm, 'username', 'required') ||
+                  hasError(registrationForm, 'username', 'minlength')
+                "
+                [class.is-valid]="
+                  registrationForm.get('username')?.valid &&
+                  registrationForm.get('username')?.touched
+                "
+              />
+              <div
+                class="invalid-feedback"
+                *ngIf="hasError(registrationForm, 'username', 'required')"
+              >
+                Username is required
+              </div>
+              <div
+                class="invalid-feedback"
+                *ngIf="hasError(registrationForm, 'username', 'minlength')"
+              >
+                Username must be at least 3 characters
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="mb-3">
+              <label for="email" class="form-label">
+                Email <span class="text-danger">*</span>
+              </label>
+              <input
+                type="email"
+                id="email"
+                class="form-control"
+                formControlName="email"
+                [class.is-invalid]="
+                  hasError(registrationForm, 'email', 'required') ||
+                  hasError(registrationForm, 'email', 'email')
+                "
+                [class.is-valid]="
+                  registrationForm.get('email')?.valid &&
+                  registrationForm.get('email')?.touched
+                "
+              />
+              <div
+                class="invalid-feedback"
+                *ngIf="hasError(registrationForm, 'email', 'required')"
+              >
+                Email is required
+              </div>
+              <div
+                class="invalid-feedback"
+                *ngIf="hasError(registrationForm, 'email', 'email')"
+              >
+                Must be a valid email address
+              </div>
+            </div>
+
+            <!-- Phone (Optional with custom validator) -->
+            <div class="mb-3">
+              <label for="phone" class="form-label">Phone Number</label>
+              <input
+                type="tel"
+                id="phone"
+                class="form-control"
+                formControlName="phone"
+                placeholder="(123) 456-7890"
+                [class.is-invalid]="
+                  hasError(registrationForm, 'phone', 'phoneNumber')
+                "
+                [class.is-valid]="
+                  registrationForm.get('phone')?.valid &&
+                  registrationForm.get('phone')?.value
+                "
+              />
+              <div
+                class="invalid-feedback"
+                *ngIf="hasError(registrationForm, 'phone', 'phoneNumber')"
+              >
+                Must be a valid phone number
+              </div>
+              <small class="form-text text-muted">
+                Optional. Format: (123) 456-7890 or 123-456-7890
+              </small>
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+              <label for="password" class="form-label">
+                Password <span class="text-danger">*</span>
+              </label>
+              <input
+                type="password"
+                id="password"
+                class="form-control"
+                formControlName="password"
+                [class.is-invalid]="
+                  hasError(registrationForm, 'password', 'required') ||
+                  hasError(registrationForm, 'password', 'strongPassword')
+                "
+                [class.is-valid]="
+                  registrationForm.get('password')?.valid &&
+                  registrationForm.get('password')?.touched
+                "
+              />
+              <div
+                class="invalid-feedback"
+                *ngIf="hasError(registrationForm, 'password', 'strongPassword')"
+              >
+                Password must contain uppercase, lowercase, number, and special
+                character (min 8 chars)
+              </div>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="mb-3">
+              <label for="confirmPassword" class="form-label">
+                Confirm Password <span class="text-danger">*</span>
+              </label>
+              <input
+                type="password"
+                id="confirmPassword"
+                class="form-control"
+                formControlName="confirmPassword"
+                [class.is-invalid]="
+                  hasError(registrationForm, 'confirmPassword', 'required') ||
+                  hasError(registrationForm, 'confirmPassword', 'matchesField')
+                "
+                [class.is-valid]="
+                  registrationForm.get('confirmPassword')?.valid &&
+                  registrationForm.get('confirmPassword')?.touched
+                "
+              />
+              <div
+                class="invalid-feedback"
+                *ngIf="
+                  hasError(registrationForm, 'confirmPassword', 'matchesField')
+                "
+              >
+                Passwords must match
+              </div>
+            </div>
+
+            <!-- Website (Optional with URL validator) -->
+            <div class="mb-3">
+              <label for="website" class="form-label">Website</label>
+              <input
+                type="url"
+                id="website"
+                class="form-control"
+                formControlName="website"
+                placeholder="https://example.com"
+                [class.is-invalid]="
+                  hasError(registrationForm, 'website', 'url')
+                "
+                [class.is-valid]="
+                  registrationForm.get('website')?.valid &&
+                  registrationForm.get('website')?.value
+                "
+              />
+              <div
+                class="invalid-feedback"
+                *ngIf="hasError(registrationForm, 'website', 'url')"
+              >
+                Must be a valid URL (e.g., https://example.com)
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-check-circle me-1"></i>
+                Submit Registration
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="resetRegistrationForm()"
+              >
+                <i class="bi bi-arrow-clockwise me-1"></i>
+                Reset
+              </button>
+              <button
+                type="button"
+                class="btn btn-info"
+                (click)="showAllErrors()"
+              >
+                <i class="bi bi-exclamation-triangle me-1"></i>
+                Show All Errors
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Login Form Demo -->
+    <div class="col-lg-6 mb-4">
+      <div class="card">
+        <div class="card-header bg-success text-white">
+          <h5 class="mb-0">Login Form Demo</h5>
+          <small>Simple validation example</small>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()">
+            <!-- Email -->
+            <div class="mb-3">
+              <label for="loginEmail" class="form-label">
+                Email <span class="text-danger">*</span>
+              </label>
+              <input
+                type="email"
+                id="loginEmail"
+                class="form-control"
+                formControlName="email"
+                [class.is-invalid]="
+                  hasError(loginForm, 'email', 'required') ||
+                  hasError(loginForm, 'email', 'email')
+                "
+                [class.is-valid]="
+                  loginForm.get('email')?.valid &&
+                  loginForm.get('email')?.touched
+                "
+              />
+              <div
+                class="invalid-feedback"
+                *ngIf="hasError(loginForm, 'email', 'required')"
+              >
+                Email is required
+              </div>
+              <div
+                class="invalid-feedback"
+                *ngIf="hasError(loginForm, 'email', 'email')"
+              >
+                Must be a valid email address
+              </div>
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+              <label for="loginPassword" class="form-label">
+                Password <span class="text-danger">*</span>
+              </label>
+              <input
+                type="password"
+                id="loginPassword"
+                class="form-control"
+                formControlName="password"
+                [class.is-invalid]="
+                  hasError(loginForm, 'password', 'required') ||
+                  hasError(loginForm, 'password', 'minlength')
+                "
+                [class.is-valid]="
+                  loginForm.get('password')?.valid &&
+                  loginForm.get('password')?.touched
+                "
+              />
+              <div
+                class="invalid-feedback"
+                *ngIf="hasError(loginForm, 'password', 'required')"
+              >
+                Password is required
+              </div>
+              <div
+                class="invalid-feedback"
+                *ngIf="hasError(loginForm, 'password', 'minlength')"
+              >
+                Password must be at least 6 characters
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-success">
+                <i class="bi bi-box-arrow-in-right me-1"></i>
+                Login
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="resetLoginForm()"
+              >
+                <i class="bi bi-arrow-clockwise me-1"></i>
+                Reset
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Error Display Card -->
+      <div class="card mt-3" *ngIf="Object.keys(formErrors).length > 0">
+        <div class="card-header bg-warning">
+          <h5 class="mb-0">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            Form Errors (from FormUtils.getAllErrors)
+          </h5>
+        </div>
+        <div class="card-body">
+          <div *ngFor="let error of Object.entries(formErrors)">
+            <strong>{{ error[0] }}:</strong>
+            <ul class="mb-2">
+              <li *ngFor="let msg of error[1]">{{ msg }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Code Examples -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header bg-dark text-white">
+          <h5 class="mb-0">
+            <i class="bi bi-code-square me-2"></i>
+            Usage Examples
+          </h5>
+        </div>
+        <div class="card-body">
+          <h6>FormUtils Example:</h6>
+          <pre
+            class="bg-light p-3 rounded"
+          ><code>// Mark all form controls as touched
+FormUtils.markAllAsTouched(this.form);
+
+// Get all validation errors
+const errors = FormUtils.getAllErrors(this.form);
+
+// Get formatted error message
+const msg = FormUtils.getErrorMessage('email', 'required', true);</code></pre>
+
+          <h6 class="mt-4">CustomValidators Example:</h6>
+          <pre class="bg-light p-3 rounded"><code>// In your form definition
+this.form = this.fb.group(&#123;
+  password: ['', [Validators.required, CustomValidators.strongPassword()]],
+  confirmPassword: ['', [
+    Validators.required, 
+    CustomValidators.matchesField('password')
+  ]],
+  phone: ['', CustomValidators.phoneNumber()],
+  website: ['', CustomValidators.url()]
+&#125;);</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

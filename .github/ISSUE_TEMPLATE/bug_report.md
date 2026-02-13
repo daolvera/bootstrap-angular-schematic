@@ -11,7 +11,7 @@ A clear and concise description of what the bug is.
 
 **To Reproduce**
 Steps to reproduce the behavior:
-1. Run `ng add @dao/bootstrap-angular-schematic`
+1. Run `ng add @daolvera/bootstrap-angular-schematic`
 2. Execute command '...'
 3. See error
 

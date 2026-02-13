@@ -24,7 +24,7 @@ npm run build
 ```bash
 # In a test Angular project
 npm link /path/to/bootstrap-angular-schematic
-ng add @dao/bootstrap-angular-schematic
+ng add @daolvera/bootstrap-angular-schematic
 ```
 
 ## Making Changes

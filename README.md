@@ -1,4 +1,4 @@
-# @dao/bootstrap-angular-schematic
+# @daolvera/bootstrap-angular-schematic
 
 An Angular schematic that generates a fully-configured Angular application with Bootstrap 5+, ng-bootstrap, pre-built services, and common UI components. Save hours of setup time with a production-ready foundation for your Angular projects.
 
@@ -10,7 +10,7 @@ ng new my-app --routing --style=scss
 cd my-app
 
 # Add the schematic
-ng add @dao/bootstrap-angular-schematic
+ng add @daolvera/bootstrap-angular-schematic
 
 # Start development server
 ng serve
@@ -166,14 +166,14 @@ All generated components are in your project and fully customizable. Modify HTML
 
 ```bash
 # Standard installation
-ng add @dao/bootstrap-angular-schematic
+ng add @daolvera/bootstrap-angular-schematic
 
 # Skip npm install (install dependencies manually later)
-ng add @dao/bootstrap-angular-schematic --skip-install
+ng add @daolvera/bootstrap-angular-schematic --skip-install
 
 # Manual installation (if ng add doesn't work)
-npm install @dao/bootstrap-angular-schematic
-ng generate @dao/bootstrap-angular-schematic:ng-add
+npm install @daolvera/bootstrap-angular-schematic
+ng generate @daolvera/bootstrap-angular-schematic:ng-add
 ```
 
 ## Common Questions

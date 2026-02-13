@@ -9,7 +9,7 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-console.log('🔨 Building @dao/bootstrap-angular-schematic...\n');
+console.log('🔨 Building @daolvera/bootstrap-angular-schematic...\n');
 
 try {
   // Clean dist folder

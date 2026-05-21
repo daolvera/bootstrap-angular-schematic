@@ -96,10 +96,10 @@
                   registrationForm.get('username')?.touched
                 "
               />
-              @if (hasError(registrationForm, 'username', 'required')) {
+              @if (hasError(registrationForm, "username", "required")) {
                 <div class="invalid-feedback">Username is required</div>
               }
-              @if (hasError(registrationForm, 'username', 'minlength')) {
+              @if (hasError(registrationForm, "username", "minlength")) {
                 <div class="invalid-feedback">
                   Username must be at least 3 characters
                 </div>
@@ -125,10 +125,10 @@
                   registrationForm.get('email')?.touched
                 "
               />
-              @if (hasError(registrationForm, 'email', 'required')) {
+              @if (hasError(registrationForm, "email", "required")) {
                 <div class="invalid-feedback">Email is required</div>
               }
-              @if (hasError(registrationForm, 'email', 'email')) {
+              @if (hasError(registrationForm, "email", "email")) {
                 <div class="invalid-feedback">
                   Must be a valid email address
                 </div>
@@ -152,10 +152,8 @@
                   registrationForm.get('phone')?.value
                 "
               />
-              @if (hasError(registrationForm, 'phone', 'phoneNumber')) {
-                <div class="invalid-feedback">
-                  Must be a valid phone number
-                </div>
+              @if (hasError(registrationForm, "phone", "phoneNumber")) {
+                <div class="invalid-feedback">Must be a valid phone number</div>
               }
               <small class="form-text text-muted">
                 Optional. Format: (123) 456-7890 or 123-456-7890
@@ -181,10 +179,10 @@
                   registrationForm.get('password')?.touched
                 "
               />
-              @if (hasError(registrationForm, 'password', 'strongPassword')) {
+              @if (hasError(registrationForm, "password", "strongPassword")) {
                 <div class="invalid-feedback">
-                  Password must contain uppercase, lowercase, number, and special
-                  character (min 8 chars)
+                  Password must contain uppercase, lowercase, number, and
+                  special character (min 8 chars)
                 </div>
               }
             </div>
@@ -209,7 +207,7 @@
                 "
               />
               @if (
-                hasError(registrationForm, 'confirmPassword', 'matchesField')
+                hasError(registrationForm, "confirmPassword", "matchesField")
               ) {
                 <div class="invalid-feedback">Passwords must match</div>
               }
@@ -232,7 +230,7 @@
                   registrationForm.get('website')?.value
                 "
               />
-              @if (hasError(registrationForm, 'website', 'url')) {
+              @if (hasError(registrationForm, "website", "url")) {
                 <div class="invalid-feedback">
                   Must be a valid URL (e.g., https://example.com)
                 </div>
@@ -295,10 +293,10 @@
                   loginForm.get('email')?.touched
                 "
               />
-              @if (hasError(loginForm, 'email', 'required')) {
+              @if (hasError(loginForm, "email", "required")) {
                 <div class="invalid-feedback">Email is required</div>
               }
-              @if (hasError(loginForm, 'email', 'email')) {
+              @if (hasError(loginForm, "email", "email")) {
                 <div class="invalid-feedback">
                   Must be a valid email address
                 </div>
@@ -324,10 +322,10 @@
                   loginForm.get('password')?.touched
                 "
               />
-              @if (hasError(loginForm, 'password', 'required')) {
+              @if (hasError(loginForm, "password", "required")) {
                 <div class="invalid-feedback">Password is required</div>
               }
-              @if (hasError(loginForm, 'password', 'minlength')) {
+              @if (hasError(loginForm, "password", "minlength")) {
                 <div class="invalid-feedback">
                   Password must be at least 6 characters
                 </div>
@@ -363,11 +361,11 @@
             </h5>
           </div>
           <div class="card-body">
-            @for (error of Object.entries(formErrors); track $index) {
+            @for (error of Object.entries(formErrors); track error[0]) {
               <div>
                 <strong>{{ error[0] }}:</strong>
                 <ul class="mb-2">
-                  @for (msg of error[1]; track $index) {
+                  @for (msg of error[1]; track msg) {
                     <li>{{ msg }}</li>
                   }
                 </ul>

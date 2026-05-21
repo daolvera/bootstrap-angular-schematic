@@ -25,7 +25,7 @@ export function ngAdd(options: Schema): Rule {
     updateAngularJson(options),
     updateMainStylesheet(options),
     addTemplateFiles(options),
-    updateAppConfig(options),
+    validateAppConfig(options),
     installDependencies(options),
     logCompletion(),
   ]);
@@ -61,8 +61,12 @@ function addDependencies(_options: Schema): Rule {
       tree.read(packageJsonPath)!.toString("utf-8"),
     );
 
-    // Detect Angular version
-    const angularVersion = packageJson.dependencies["@angular/core"];
+    const dependencies = packageJson.dependencies || {};
+    const devDependencies = packageJson.devDependencies || {};
+
+    // Detect Angular version from dependencies or devDependencies
+    const angularVersion =
+      dependencies["@angular/core"] || devDependencies["@angular/core"];
     let ngBootstrapVersion = "^20.0.0";
 
     // Determine appropriate ng-bootstrap version based on Angular version
@@ -77,8 +81,13 @@ function addDependencies(_options: Schema): Rule {
       }
     }
 
+    if (!angularVersion) {
+      context.logger.warn(
+        "⚠️  Could not detect @angular/core version. Using defaults for Angular 21+.",
+      );
+    }
+
     // Add dependencies
-    const dependencies = packageJson.dependencies || {};
     dependencies["bootstrap"] = "^5.3.8";
     dependencies["@ng-bootstrap/ng-bootstrap"] = ngBootstrapVersion;
     dependencies["@popperjs/core"] = "^2.11.8";
@@ -94,7 +103,9 @@ function addDependencies(_options: Schema): Rule {
     // Add @angular/forms if not present (peer dependency of ng-bootstrap)
     if (!dependencies["@angular/forms"]) {
       dependencies["@angular/forms"] = angularVersion || "^21.0.0";
-      context.logger.info("✅ Added @angular/forms (required for ng-bootstrap)");
+      context.logger.info(
+        "✅ Added @angular/forms (required for ng-bootstrap)",
+      );
     }
 
     // Add @angular/localize if not present (peer dependency of ng-bootstrap)
@@ -375,9 +386,9 @@ function addTemplateFiles(options: Schema): Rule {
 }
 
 /**
- * Update app.config.ts to include ng-bootstrap providers
+ * Validate app.config.ts compatibility for ng-bootstrap template output
  */
-function updateAppConfig(_options: Schema): Rule {
+function validateAppConfig(_options: Schema): Rule {
   return (tree: Tree, context: SchematicContext) => {
     const appConfigPath = "/src/app/app.config.ts";
 
@@ -401,7 +412,7 @@ function updateAppConfig(_options: Schema): Rule {
       );
     }
 
-    context.logger.info("✅ Updated app.config.ts for ng-bootstrap");
+    context.logger.info("✅ Validated app.config.ts for ng-bootstrap template");
 
     return tree;
   };

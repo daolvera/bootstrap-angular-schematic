@@ -4,8 +4,16 @@ import {
   NgbModalOptions,
   NgbModalRef,
 } from "@ng-bootstrap/ng-bootstrap";
-import { Observable, from } from "rxjs";
+import { Observable, catchError, from, map, of } from "rxjs";
 import { IModalConfig } from "../models";
+
+export type ModalObservableResult<TResult> =
+  | { closed: true; result: TResult }
+  | { closed: false; reason: unknown };
+
+interface ModalTitleComponent {
+  title: string;
+}
 
 /**
  * Service to manage modals using ng-bootstrap
@@ -15,6 +23,12 @@ import { IModalConfig } from "../models";
 })
 export class ModalService {
   private ngbModal = inject(NgbModal);
+
+  private hasTitleProperty(instance: unknown): instance is ModalTitleComponent {
+    return (
+      typeof instance === "object" && instance !== null && "title" in instance
+    );
+  }
 
   /**
    * Open a modal with the specified component
@@ -33,8 +47,8 @@ export class ModalService {
     const modalRef = this.ngbModal.open(component, options);
 
     // If title is provided, set it on the component instance if it has a title property
-    if (config?.title && "title" in modalRef.componentInstance) {
-      (modalRef.componentInstance as any).title = config.title;
+    if (config?.title && this.hasTitleProperty(modalRef.componentInstance)) {
+      modalRef.componentInstance.title = config.title;
     }
 
     return modalRef;
@@ -46,12 +60,15 @@ export class ModalService {
    * @param config Modal configuration options
    * @returns Observable that emits when the modal is closed or dismissed
    */
-  openAsObservable<T>(
+  openAsObservable<T, TResult = unknown>(
     component: Type<T>,
     config?: IModalConfig,
-  ): Observable<any> {
+  ): Observable<ModalObservableResult<TResult>> {
     const modalRef = this.open(component, config);
-    return from(modalRef.result);
+    return from(modalRef.result as Promise<TResult>).pipe(
+      map((result) => ({ closed: true as const, result })),
+      catchError((reason: unknown) => of({ closed: false as const, reason })),
+    );
   }
 
   /**

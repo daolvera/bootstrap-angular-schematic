@@ -57,16 +57,20 @@ export class NotificationService {
    * Show a notification
    * @param notification The notification to display
    */
-  show(notification: INotification): void {
+  show(notification: Omit<INotification, "id">): void {
+    const fullNotification: INotification = {
+      ...notification,
+      id: crypto.randomUUID(),
+    };
     const notifications = this.notificationsSubject.value;
-    notifications.push(notification);
+    notifications.push(fullNotification);
     this.notificationsSubject.next(notifications);
 
     // Auto-dismiss after duration if specified
-    if (notification.duration && notification.duration > 0) {
+    if (fullNotification.duration && fullNotification.duration > 0) {
       setTimeout(() => {
-        this.dismiss(notification);
-      }, notification.duration);
+        this.dismiss(fullNotification);
+      }, fullNotification.duration);
     }
   }
 

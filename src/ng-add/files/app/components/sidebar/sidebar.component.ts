@@ -1,5 +1,5 @@
-import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
+import { toSignal } from "@angular/core/rxjs-interop";
 import { RouterLink, RouterLinkActive } from "@angular/router";
 import { INavigationItem } from "../../models";
 import { NavigationService } from "../../services/navigation.service";
@@ -7,9 +7,9 @@ import { NavigationService } from "../../services/navigation.service";
 @Component({
   selector: "app-sidebar",
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive],
   templateUrl: "./sidebar.component.html",
-  styleUrls: ["./sidebar.component.scss"],
+  styleUrl: "./sidebar.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarComponent {
@@ -19,7 +19,10 @@ export class SidebarComponent {
     { label: "Utils Demo", route: "/utils-demo", icon: "tools" },
   ];
 
-  constructor(public navigationService: NavigationService) {}
+  private navigationService = inject(NavigationService);
+  protected sidebarOpen = toSignal(this.navigationService.sidebarOpen$, {
+    initialValue: false,
+  });
 
   closeSidebar(): void {
     this.navigationService.closeSidebar();

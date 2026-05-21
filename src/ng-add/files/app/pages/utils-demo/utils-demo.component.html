@@ -96,18 +96,14 @@
                   registrationForm.get('username')?.touched
                 "
               />
-              <div
-                class="invalid-feedback"
-                *ngIf="hasError(registrationForm, 'username', 'required')"
-              >
-                Username is required
-              </div>
-              <div
-                class="invalid-feedback"
-                *ngIf="hasError(registrationForm, 'username', 'minlength')"
-              >
-                Username must be at least 3 characters
-              </div>
+              @if (hasError(registrationForm, 'username', 'required')) {
+                <div class="invalid-feedback">Username is required</div>
+              }
+              @if (hasError(registrationForm, 'username', 'minlength')) {
+                <div class="invalid-feedback">
+                  Username must be at least 3 characters
+                </div>
+              }
             </div>
 
             <!-- Email -->
@@ -129,18 +125,14 @@
                   registrationForm.get('email')?.touched
                 "
               />
-              <div
-                class="invalid-feedback"
-                *ngIf="hasError(registrationForm, 'email', 'required')"
-              >
-                Email is required
-              </div>
-              <div
-                class="invalid-feedback"
-                *ngIf="hasError(registrationForm, 'email', 'email')"
-              >
-                Must be a valid email address
-              </div>
+              @if (hasError(registrationForm, 'email', 'required')) {
+                <div class="invalid-feedback">Email is required</div>
+              }
+              @if (hasError(registrationForm, 'email', 'email')) {
+                <div class="invalid-feedback">
+                  Must be a valid email address
+                </div>
+              }
             </div>
 
             <!-- Phone (Optional with custom validator) -->
@@ -160,12 +152,11 @@
                   registrationForm.get('phone')?.value
                 "
               />
-              <div
-                class="invalid-feedback"
-                *ngIf="hasError(registrationForm, 'phone', 'phoneNumber')"
-              >
-                Must be a valid phone number
-              </div>
+              @if (hasError(registrationForm, 'phone', 'phoneNumber')) {
+                <div class="invalid-feedback">
+                  Must be a valid phone number
+                </div>
+              }
               <small class="form-text text-muted">
                 Optional. Format: (123) 456-7890 or 123-456-7890
               </small>
@@ -190,13 +181,12 @@
                   registrationForm.get('password')?.touched
                 "
               />
-              <div
-                class="invalid-feedback"
-                *ngIf="hasError(registrationForm, 'password', 'strongPassword')"
-              >
-                Password must contain uppercase, lowercase, number, and special
-                character (min 8 chars)
-              </div>
+              @if (hasError(registrationForm, 'password', 'strongPassword')) {
+                <div class="invalid-feedback">
+                  Password must contain uppercase, lowercase, number, and special
+                  character (min 8 chars)
+                </div>
+              }
             </div>
 
             <!-- Confirm Password -->
@@ -218,14 +208,11 @@
                   registrationForm.get('confirmPassword')?.touched
                 "
               />
-              <div
-                class="invalid-feedback"
-                *ngIf="
-                  hasError(registrationForm, 'confirmPassword', 'matchesField')
-                "
-              >
-                Passwords must match
-              </div>
+              @if (
+                hasError(registrationForm, 'confirmPassword', 'matchesField')
+              ) {
+                <div class="invalid-feedback">Passwords must match</div>
+              }
             </div>
 
             <!-- Website (Optional with URL validator) -->
@@ -245,12 +232,11 @@
                   registrationForm.get('website')?.value
                 "
               />
-              <div
-                class="invalid-feedback"
-                *ngIf="hasError(registrationForm, 'website', 'url')"
-              >
-                Must be a valid URL (e.g., https://example.com)
-              </div>
+              @if (hasError(registrationForm, 'website', 'url')) {
+                <div class="invalid-feedback">
+                  Must be a valid URL (e.g., https://example.com)
+                </div>
+              }
             </div>
 
             <!-- Action Buttons -->
@@ -309,18 +295,14 @@
                   loginForm.get('email')?.touched
                 "
               />
-              <div
-                class="invalid-feedback"
-                *ngIf="hasError(loginForm, 'email', 'required')"
-              >
-                Email is required
-              </div>
-              <div
-                class="invalid-feedback"
-                *ngIf="hasError(loginForm, 'email', 'email')"
-              >
-                Must be a valid email address
-              </div>
+              @if (hasError(loginForm, 'email', 'required')) {
+                <div class="invalid-feedback">Email is required</div>
+              }
+              @if (hasError(loginForm, 'email', 'email')) {
+                <div class="invalid-feedback">
+                  Must be a valid email address
+                </div>
+              }
             </div>
 
             <!-- Password -->
@@ -342,18 +324,14 @@
                   loginForm.get('password')?.touched
                 "
               />
-              <div
-                class="invalid-feedback"
-                *ngIf="hasError(loginForm, 'password', 'required')"
-              >
-                Password is required
-              </div>
-              <div
-                class="invalid-feedback"
-                *ngIf="hasError(loginForm, 'password', 'minlength')"
-              >
-                Password must be at least 6 characters
-              </div>
+              @if (hasError(loginForm, 'password', 'required')) {
+                <div class="invalid-feedback">Password is required</div>
+              }
+              @if (hasError(loginForm, 'password', 'minlength')) {
+                <div class="invalid-feedback">
+                  Password must be at least 6 characters
+                </div>
+              }
             </div>
 
             <!-- Action Buttons -->
@@ -376,22 +354,28 @@
       </div>
 
       <!-- Error Display Card -->
-      <div class="card mt-3" *ngIf="Object.keys(formErrors).length > 0">
-        <div class="card-header bg-warning">
-          <h5 class="mb-0">
-            <i class="bi bi-exclamation-triangle me-2"></i>
-            Form Errors (from FormUtils.getAllErrors)
-          </h5>
-        </div>
-        <div class="card-body">
-          <div *ngFor="let error of Object.entries(formErrors)">
-            <strong>{{ error[0] }}:</strong>
-            <ul class="mb-2">
-              <li *ngFor="let msg of error[1]">{{ msg }}</li>
-            </ul>
+      @if (Object.keys(formErrors).length > 0) {
+        <div class="card mt-3">
+          <div class="card-header bg-warning">
+            <h5 class="mb-0">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              Form Errors (from FormUtils.getAllErrors)
+            </h5>
+          </div>
+          <div class="card-body">
+            @for (error of Object.entries(formErrors); track $index) {
+              <div>
+                <strong>{{ error[0] }}:</strong>
+                <ul class="mb-2">
+                  @for (msg of error[1]; track $index) {
+                    <li>{{ msg }}</li>
+                  }
+                </ul>
+              </div>
+            }
           </div>
         </div>
-      </div>
+      }
     </div>
   </div>
 

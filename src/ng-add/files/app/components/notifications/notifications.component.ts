@@ -1,18 +1,22 @@
-import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
+import { toSignal } from "@angular/core/rxjs-interop";
 import { INotification } from "../../models";
 import { NotificationService } from "../../services/notification.service";
 
 @Component({
   selector: "app-notifications",
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: "./notifications.component.html",
-  styleUrls: ["./notifications.component.scss"],
+  styleUrl: "./notifications.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotificationsComponent {
-  constructor(public notificationService: NotificationService) {}
+  private notificationService = inject(NotificationService);
+  protected notifications = toSignal(
+    this.notificationService.notifications$,
+    { initialValue: [] as INotification[] },
+  );
 
   dismiss(notification: INotification): void {
     this.notificationService.dismiss(notification);

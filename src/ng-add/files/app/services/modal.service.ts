@@ -1,4 +1,4 @@
-import { Injectable, Type } from "@angular/core";
+import { Injectable, Type, inject } from "@angular/core";
 import {
   NgbModal,
   NgbModalOptions,
@@ -14,7 +14,7 @@ import { IModalConfig } from "../models";
   providedIn: "root",
 })
 export class ModalService {
-  constructor(private ngbModal: NgbModal) {}
+  private ngbModal = inject(NgbModal);
 
   /**
    * Open a modal with the specified component

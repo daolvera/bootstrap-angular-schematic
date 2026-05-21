@@ -63,11 +63,11 @@ function addDependencies(_options: Schema): Rule {
 
     // Detect Angular version
     const angularVersion = packageJson.dependencies["@angular/core"];
-    let ngBootstrapVersion = "^18.0.0";
+    let ngBootstrapVersion = "^20.0.0";
 
     // Determine appropriate ng-bootstrap version based on Angular version
     if (angularVersion) {
-      const majorVersion = parseInt(angularVersion.match(/\d+/)?.[0] || "19");
+      const majorVersion = parseInt(angularVersion.match(/\d+/)?.[0] || "21");
       if (majorVersion >= 21) {
         ngBootstrapVersion = "^20.0.0"; // ng-bootstrap 20 for Angular 21+
       } else if (majorVersion >= 19) {
@@ -79,7 +79,7 @@ function addDependencies(_options: Schema): Rule {
 
     // Add dependencies
     const dependencies = packageJson.dependencies || {};
-    dependencies["bootstrap"] = "^5.3.3";
+    dependencies["bootstrap"] = "^5.3.8";
     dependencies["@ng-bootstrap/ng-bootstrap"] = ngBootstrapVersion;
     dependencies["@popperjs/core"] = "^2.11.8";
 
@@ -88,6 +88,20 @@ function addDependencies(_options: Schema): Rule {
       dependencies["@angular/animations"] = angularVersion || "^21.0.0";
       context.logger.info(
         "✅ Added @angular/animations (required for ng-bootstrap)",
+      );
+    }
+
+    // Add @angular/forms if not present (peer dependency of ng-bootstrap)
+    if (!dependencies["@angular/forms"]) {
+      dependencies["@angular/forms"] = angularVersion || "^21.0.0";
+      context.logger.info("✅ Added @angular/forms (required for ng-bootstrap)");
+    }
+
+    // Add @angular/localize if not present (peer dependency of ng-bootstrap)
+    if (!dependencies["@angular/localize"]) {
+      dependencies["@angular/localize"] = angularVersion || "^21.0.0";
+      context.logger.info(
+        "✅ Added @angular/localize (required for ng-bootstrap)",
       );
     }
 
@@ -165,7 +179,7 @@ function updateAngularJson(options: Schema): Rule {
 
     // Add Bootstrap Icons CSS
     const bootstrapIconsStyle =
-      "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css";
+      "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css";
     if (!styles.includes(bootstrapIconsStyle)) {
       styles.push(bootstrapIconsStyle);
       context.logger.info("✅ Added Bootstrap Icons to angular.json");
@@ -288,7 +302,7 @@ function updateMainStylesheet(options: Schema): Rule {
       // For CSS, we'll just add a comment since we can't use Sass imports
       bootstrapImports = `/* Bootstrap Angular Schematic */
 /* Note: For full Bootstrap customization, consider using SCSS instead of CSS */
-@import url('https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css');
+@import url('https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css');
 
 /* Your custom styles below */
 `;
@@ -298,7 +312,7 @@ function updateMainStylesheet(options: Schema): Rule {
     } else if (stylesheetType === "less") {
       bootstrapImports = `// Bootstrap Angular Schematic
 // Note: Bootstrap uses SCSS. For full support, consider using SCSS instead of LESS
-@import (css) 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css';
+@import (css) 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css';
 
 // Your custom styles below
 `;
@@ -376,10 +390,14 @@ function updateAppConfig(_options: Schema): Rule {
 
     let content = tree.read(appConfigPath)!.toString("utf-8");
 
-    // Check if already has provideAnimations
-    if (!content.includes("provideAnimations")) {
+    // Check if already has provideZonelessChangeDetection
+    if (content.includes("provideZonelessChangeDetection")) {
       context.logger.info(
-        "✅ app.config.ts already includes animation providers",
+        "✅ app.config.ts already includes zoneless change detection",
+      );
+    } else {
+      context.logger.warn(
+        "⚠️  app.config.ts does not include provideZonelessChangeDetection - template will overwrite it",
       );
     }
 
@@ -418,10 +436,12 @@ function logCompletion(): Rule {
     );
     context.logger.info("");
     context.logger.info("🎯 Features:");
-    context.logger.info("  • Zoneless Angular (experimental) - no Zone.js!");
+    context.logger.info("  • Zoneless Angular - no Zone.js!");
     context.logger.info("  • Bootstrap 5 with full SCSS customization");
     context.logger.info("  • ng-bootstrap components");
     context.logger.info("  • OnPush change detection strategy");
+    context.logger.info("  • Signal-based state management");
+    context.logger.info("  • Modern Angular control flow (@if, @for)");
     context.logger.info("");
     context.logger.info("📚 Next steps:");
     context.logger.info('  1. Run "ng serve" to start the development server');

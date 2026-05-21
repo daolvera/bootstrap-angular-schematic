@@ -13,6 +13,7 @@ export interface IModalConfig {
  * Notification interface
  */
 export interface INotification {
+  id: string;
   message: string;
   type: "success" | "error" | "warning" | "info";
   duration?: number;

@@ -1,18 +1,17 @@
-import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { RouterLink, RouterLinkActive } from "@angular/router";
 import { NavigationService } from "../../services/navigation.service";
 
 @Component({
   selector: "app-header",
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive],
   templateUrl: "./header.component.html",
-  styleUrls: ["./header.component.scss"],
+  styleUrl: "./header.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
-  constructor(public navigationService: NavigationService) {}
+  private navigationService = inject(NavigationService);
 
   toggleSidebar(): void {
     this.navigationService.toggleSidebar();

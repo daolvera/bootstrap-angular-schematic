@@ -1,5 +1,4 @@
-import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { SampleModalComponent } from "../../components/sample-modal/sample-modal.component";
 import { ThemeToggleComponent } from "../../components/theme-toggle/theme-toggle.component";
 import { ModalService } from "../../services/modal.service";
@@ -9,17 +8,15 @@ import { SpinnerService } from "../../services/spinner.service";
 @Component({
   selector: "app-home",
   standalone: true,
-  imports: [CommonModule, ThemeToggleComponent],
+  imports: [ThemeToggleComponent],
   templateUrl: "./home.component.html",
-  styleUrls: ["./home.component.scss"],
+  styleUrl: "./home.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {
-  constructor(
-    private spinnerService: SpinnerService,
-    private modalService: ModalService,
-    private notificationService: NotificationService,
-  ) {}
+  private spinnerService = inject(SpinnerService);
+  private modalService = inject(ModalService);
+  private notificationService = inject(NotificationService);
 
   showSpinner(): void {
     this.spinnerService.show("Processing...");

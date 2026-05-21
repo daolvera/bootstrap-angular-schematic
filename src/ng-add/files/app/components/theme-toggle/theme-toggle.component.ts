@@ -1,5 +1,4 @@
-import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, signal } from "@angular/core";
+import { ChangeDetectionStrategy, Component, computed, inject } from "@angular/core";
 import { ThemeService } from "../../services/theme.service";
 
 /**
@@ -9,7 +8,7 @@ import { ThemeService } from "../../services/theme.service";
 @Component({
   selector: "app-theme-toggle",
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <div class="theme-toggle">
       <button
@@ -57,19 +56,10 @@ import { ThemeService } from "../../services/theme.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ThemeToggleComponent {
-  isDark = signal(false);
-
-  constructor(private themeService: ThemeService) {
-    // Subscribe to theme changes
-    this.updateIsDark();
-  }
+  private themeService = inject(ThemeService);
+  protected isDark = computed(() => this.themeService.isDarkMode());
 
   toggleTheme(): void {
     this.themeService.toggleTheme();
-    this.updateIsDark();
-  }
-
-  private updateIsDark(): void {
-    this.isDark.set(this.themeService.isDarkMode());
   }
 }

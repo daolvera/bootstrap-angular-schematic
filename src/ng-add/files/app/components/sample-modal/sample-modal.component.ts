@@ -1,19 +1,17 @@
-import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: "app-sample-modal",
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: "./sample-modal.component.html",
-  styleUrls: ["./sample-modal.component.scss"],
+  styleUrl: "./sample-modal.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SampleModalComponent {
+  protected activeModal = inject(NgbActiveModal);
   title: string = "Sample Modal";
-
-  constructor(public activeModal: NgbActiveModal) {}
 
   confirm(): void {
     this.activeModal.close("Confirmed");

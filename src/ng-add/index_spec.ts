@@ -29,6 +29,8 @@ describe("ng-add schematic", () => {
       packageJson.dependencies["@ng-bootstrap/ng-bootstrap"],
     ).toBeDefined();
     expect(packageJson.dependencies["@popperjs/core"]).toBeDefined();
+    expect(packageJson.dependencies["@angular/forms"]).toBeDefined();
+    expect(packageJson.dependencies["@angular/localize"]).toBeDefined();
   });
 
   it("should update angular.json with Bootstrap Icons and custom styles", async () => {
@@ -42,7 +44,7 @@ describe("ng-add schematic", () => {
       angularJson.projects["test-app"].architect.build.options.styles;
 
     expect(styles).toContain(
-      "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css",
+      "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css",
     );
     expect(styles.some((s: string) => s.includes("styles/styles.scss"))).toBe(
       true,
@@ -186,9 +188,9 @@ function createTestApp(): UnitTestTree {
         name: "test-app",
         version: "0.0.0",
         dependencies: {
-          "@angular/core": "^19.0.0",
-          "@angular/common": "^19.0.0",
-          "@angular/platform-browser": "^19.0.0",
+          "@angular/core": "^21.0.0",
+          "@angular/common": "^21.0.0",
+          "@angular/platform-browser": "^21.0.0",
         },
       },
       null,

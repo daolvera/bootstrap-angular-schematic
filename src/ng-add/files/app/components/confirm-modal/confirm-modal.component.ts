@@ -1,5 +1,4 @@
-import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, inject } from "@angular/core";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 
 /**
@@ -9,7 +8,7 @@ import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 @Component({
   selector: "app-confirm-modal",
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <div class="modal-header">
       <h5 class="modal-title">{{ title }}</h5>
@@ -45,12 +44,12 @@ import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfirmModalComponent {
+  protected activeModal = inject(NgbActiveModal);
+
   @Input() title = "Confirm Action";
   @Input() message = "Are you sure you want to proceed?";
   @Input() details?: string;
   @Input() confirmText = "Confirm";
   @Input() cancelText = "Cancel";
   @Input() confirmButtonClass = "btn-primary";
-
-  constructor(public activeModal: NgbActiveModal) {}
 }

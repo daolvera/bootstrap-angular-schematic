@@ -1,5 +1,4 @@
-import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import {
   FormBuilder,
   FormGroup,
@@ -13,9 +12,9 @@ import { CustomValidators } from "../../utils/validators";
 @Component({
   selector: "app-utils-demo",
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: "./utils-demo.component.html",
-  styleUrls: ["./utils-demo.component.scss"],
+  styleUrl: "./utils-demo.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UtilsDemoComponent {
@@ -26,10 +25,10 @@ export class UtilsDemoComponent {
   // Expose Object to template
   protected readonly Object = Object;
 
-  constructor(
-    private fb: FormBuilder,
-    private notificationService: NotificationService,
-  ) {
+  private fb = inject(FormBuilder);
+  private notificationService = inject(NotificationService);
+
+  constructor() {
     this.registrationForm = this.createRegistrationForm();
     this.loginForm = this.createLoginForm();
   }

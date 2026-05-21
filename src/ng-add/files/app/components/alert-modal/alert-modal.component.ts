@@ -1,5 +1,4 @@
-import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, inject } from "@angular/core";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 
 export type AlertType = "success" | "error" | "warning" | "info";
@@ -11,7 +10,7 @@ export type AlertType = "success" | "error" | "warning" | "info";
 @Component({
   selector: "app-alert-modal",
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <div class="modal-header" [class]="'bg-' + alertClass">
       <h5
@@ -51,13 +50,13 @@ export type AlertType = "success" | "error" | "warning" | "info";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlertModalComponent {
+  protected activeModal = inject(NgbActiveModal);
+
   @Input() type: AlertType = "info";
   @Input() title = "Alert";
   @Input() message = "";
   @Input() details?: string;
   @Input() buttonText = "OK";
-
-  constructor(public activeModal: NgbActiveModal) {}
 
   get alertClass(): string {
     const map: Record<AlertType, string> = {

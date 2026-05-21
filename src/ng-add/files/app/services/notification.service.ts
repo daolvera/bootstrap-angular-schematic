@@ -10,12 +10,23 @@ import { INotification } from "../models";
 })
 export class NotificationService {
   private notificationsSubject = new BehaviorSubject<INotification[]>([]);
+  private fallbackIdCounter = 0;
 
   /**
    * Observable of current notifications
    */
   public notifications$: Observable<INotification[]> =
     this.notificationsSubject.asObservable();
+
+  private createNotificationId(): string {
+    const uuid = globalThis.crypto?.randomUUID?.();
+    if (uuid) {
+      return uuid;
+    }
+
+    this.fallbackIdCounter += 1;
+    return `notification-${Date.now()}-${this.fallbackIdCounter}-${Math.random().toString(36).slice(2, 10)}`;
+  }
 
   /**
    * Show a success notification
@@ -57,16 +68,21 @@ export class NotificationService {
    * Show a notification
    * @param notification The notification to display
    */
-  show(notification: INotification): void {
-    const notifications = this.notificationsSubject.value;
-    notifications.push(notification);
-    this.notificationsSubject.next(notifications);
+  show(notification: Omit<INotification, "id">): void {
+    const fullNotification: INotification = {
+      ...notification,
+      id: this.createNotificationId(),
+    };
+    this.notificationsSubject.next([
+      ...this.notificationsSubject.value,
+      fullNotification,
+    ]);
 
     // Auto-dismiss after duration if specified
-    if (notification.duration && notification.duration > 0) {
+    if (fullNotification.duration && fullNotification.duration > 0) {
       setTimeout(() => {
-        this.dismiss(notification);
-      }, notification.duration);
+        this.dismiss(fullNotification.id);
+      }, fullNotification.duration);
     }
   }
 
@@ -74,9 +90,11 @@ export class NotificationService {
    * Dismiss a specific notification
    * @param notification The notification to dismiss
    */
-  dismiss(notification: INotification): void {
+  dismiss(notification: INotification | string): void {
+    const notificationId =
+      typeof notification === "string" ? notification : notification.id;
     const notifications = this.notificationsSubject.value.filter(
-      (n) => n !== notification,
+      (n) => n.id !== notificationId,
     );
     this.notificationsSubject.next(notifications);
   }
